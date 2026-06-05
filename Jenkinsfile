@@ -87,7 +87,7 @@ pipeline {
         
         stage('Verify') {
             steps {
-                echo 'Waiting for application to start...'
+                echo 'Waiting for application to starter...'
                 sh 'sleep 15'
                 sh 'docker ps'
                 echo '✅ Application deployed successfully!'
