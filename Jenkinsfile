@@ -19,15 +19,14 @@ pipeline {
         
         stage('Start Test Database') {
             steps {
-                echo 'Starting PostgreSQL for tests...'
+                echo 'Starting PostgreSQL for tests on port 5433...'
                 sh 'docker stop traployee-test-postgres || true'
                 sh 'docker rm traployee-test-postgres || true'
-                // IMPORTANT: Use "Traployee" with capital T
                 sh 'docker run -d --name traployee-test-postgres \
                     -e POSTGRES_DB=Traployee \
                     -e POSTGRES_USER=postgres \
                     -e POSTGRES_PASSWORD=password \
-                    -p 5432:5432 \
+                    -p 5433:5432 \
                     postgres:15'
                 echo 'Waiting for PostgreSQL to start...'
                 sh 'sleep 10'
@@ -37,7 +36,12 @@ pipeline {
         stage('Run Tests') {
             steps {
                 echo 'Running tests with test database...'
-                echo 'Tests successful!'
+                sh './mvnw test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
             }
         }
         
@@ -56,34 +60,34 @@ pipeline {
             }
         }
         
-      stage('Deploy') {
-    steps {
-        echo 'Deploying with Docker...'
-        sh 'docker stop traployee-backend || true'
-        sh 'docker rm traployee-backend || true'
-        sh 'docker stop traployee-postgres || true'
-        sh 'docker rm traployee-postgres || true'
-        
-        echo 'Starting PostgreSQL...'
-        sh 'docker run -d --name traployee-postgres \
-            -e POSTGRES_DB=Traployee \
-            -e POSTGRES_USER=postgres \
-            -e POSTGRES_PASSWORD=password \
-            -p 5432:5432 \
-            postgres:15'
-        
-        echo 'Waiting for PostgreSQL to start...'
-        sh 'sleep 10'
-        
-        echo 'Starting Spring Boot application...'
-        sh 'docker run -d --name traployee-backend \
-            -p 8080:8080 \
-            -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/Traployee \
-            -e SPRING_DATASOURCE_USERNAME=postgres \
-            -e SPRING_DATASOURCE_PASSWORD=password \
-            traployee-backend:latest'
-    }
-}
+        stage('Deploy') {
+            steps {
+                echo '🟡 Shutting down old containers...'
+                sh 'docker stop traployee-backend || true'
+                sh 'docker rm traployee-backend || true'
+                sh 'docker stop traployee-postgres || true'
+                sh 'docker rm traployee-postgres || true'
+                
+                echo '🟢 Starting fresh PostgreSQL...'
+                sh 'docker run -d --name traployee-postgres \
+                    -e POSTGRES_DB=Traployee \
+                    -e POSTGRES_USER=postgres \
+                    -e POSTGRES_PASSWORD=password \
+                    -p 5432:5432 \
+                    postgres:15'
+                
+                echo 'Waiting for PostgreSQL to start...'
+                sh 'sleep 10'
+                
+                echo '🟢 Starting fresh Spring Boot application...'
+                sh 'docker run -d --name traployee-backend \
+                    -p 8080:8080 \
+                    -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/Traployee \
+                    -e SPRING_DATASOURCE_USERNAME=postgres \
+                    -e SPRING_DATASOURCE_PASSWORD=password \
+                    traployee-backend:latest'
+            }
+        }
         
         stage('Verify') {
             steps {
@@ -91,15 +95,14 @@ pipeline {
                 sh 'sleep 15'
                 sh 'docker ps'
                 echo '✅ Application deployed successfully!'
+                echo 'App: http://localhost:8080'
             }
         }
     }
     
     post {
         success {
-            echo '🎉 Pipeline completed!'
-            echo 'App: http://localhost:8080'
-            echo 'Jenkins: http://localhost:8081'
+            echo '🎉 Pipeline completed! Containers restarted with latest code!'
         }
         failure {
             echo '💥 Pipeline failed. Check logs above.'
