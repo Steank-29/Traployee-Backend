@@ -37,7 +37,7 @@ pipeline {
             steps {
                 echo 'Running tests with test database...'
                 echo 'Test in progress...'
-                echo 'Test completed!'
+                echo 'Test completed!ok'
             }
         }
         
