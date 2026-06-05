@@ -56,13 +56,34 @@ pipeline {
             }
         }
         
-        stage('Deploy') {
-            steps {
-                echo 'Deploying with Docker Compose...'
-                sh 'docker-compose down || true'
-                sh 'docker-compose up -d'
-            }
-        }
+      stage('Deploy') {
+    steps {
+        echo 'Deploying with Docker...'
+        sh 'docker stop traployee-backend || true'
+        sh 'docker rm traployee-backend || true'
+        sh 'docker stop traployee-postgres || true'
+        sh 'docker rm traployee-postgres || true'
+        
+        echo 'Starting PostgreSQL...'
+        sh 'docker run -d --name traployee-postgres \
+            -e POSTGRES_DB=Traployee \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=password \
+            -p 5432:5432 \
+            postgres:15'
+        
+        echo 'Waiting for PostgreSQL to start...'
+        sh 'sleep 10'
+        
+        echo 'Starting Spring Boot application...'
+        sh 'docker run -d --name traployee-backend \
+            -p 8080:8080 \
+            -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/Traployee \
+            -e SPRING_DATASOURCE_USERNAME=postgres \
+            -e SPRING_DATASOURCE_PASSWORD=password \
+            traployee-backend:latest'
+    }
+}
         
         stage('Verify') {
             steps {
