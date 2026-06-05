@@ -5,7 +5,7 @@ services:
     image: postgres:15
     container_name: traployee-postgres
     environment:
-      POSTGRES_DB: Traployee
+      POSTGRES_DB: Traployee  # Capital T
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
@@ -21,7 +21,7 @@ services:
     depends_on:
       - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/Traployee
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/Traployee  # Capital T
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
