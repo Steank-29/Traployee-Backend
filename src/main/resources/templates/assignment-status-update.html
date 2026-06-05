@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment Status Update</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #161614;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #1a1a18;
+            border: 1px solid #2a2a28;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #111110 0%, #1a1a18 100%);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #2a2a28;
+        }
+        .header h1 {
+            color: #5ab4ff;
+            font-family: 'Syne', sans-serif;
+            font-size: 28px;
+            margin: 0;
+        }
+        .content {
+            padding: 30px;
+            color: #f0ede8;
+        }
+        .status-change {
+            background: #111110;
+            border: 1px solid #2a2a28;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .old-status {
+            color: #ffb340;
+            font-weight: bold;
+        }
+        .new-status {
+            color: #5adf8c;
+            font-weight: bold;
+        }
+        .arrow {
+            font-size: 24px;
+            margin: 0 10px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #c8f55a, #a8d540);
+            color: #111;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        .footer {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #2a2a28;
+            color: #888882;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Assignment Status Updated</h1>
+        </div>
+        <div class="content">
+            <p>Hello <strong th:text="${employee.name}">Employee</strong>,</p>
+            <p>Your assignment status has been updated.</p>
+            
+            <div class="status-change">
+                <span class="old-status" th:text="${oldStatus}">Pending</span>
+                <span class="arrow">→</span>
+                <span class="new-status" th:text="${newStatus}">Completed</span>
+            </div>
+            
+            <div class="assignment-details">
+                <p><strong>Assignment:</strong> <span th:text="${assignment.title}">Title</span></p>
+                <p><strong>Due Date:</strong> <span th:text="${assignment.dueDate}">Date</span></p>
+            </div>
+            
+            <a href="http://localhost:1234/employee" class="button">View Details →</a>
+        </div>
+        <div class="footer">
+            <p>&copy; <span th:text="${year}">2024</span> Traployee. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

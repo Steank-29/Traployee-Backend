@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New Assignment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #161614;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #1a1a18;
+            border: 1px solid #2a2a28;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #111110 0%, #1a1a18 100%);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #2a2a28;
+        }
+        .header h1 {
+            color: #c8f55a;
+            font-family: 'Syne', sans-serif;
+            font-size: 28px;
+            margin: 0;
+        }
+        .content {
+            padding: 30px;
+            color: #f0ede8;
+        }
+        .assignment-details {
+            background: #111110;
+            border: 1px solid #2a2a28;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .detail-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #2a2a28;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: #c8f55a;
+            width: 120px;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+        }
+        .detail-value {
+            color: #f0ede8;
+            flex: 1;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #c8f55a, #a8d540);
+            color: #111;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        .footer {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #2a2a28;
+            color: #888882;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 New Assignment</h1>
+        </div>
+        <div class="content">
+            <p>Hello <strong th:text="${employee.name}">Employee</strong>,</p>
+            <p>You have been assigned a new task in the <strong th:text="${companyName}">Traployee</strong> system.</p>
+            
+            <div class="assignment-details">
+                <div class="detail-row">
+                    <div class="detail-label">Assignment ID:</div>
+                    <div class="detail-value" th:text="${assignment.id}">ASS001</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Title:</div>
+                    <div class="detail-value" th:text="${assignment.title}">Complete Report</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Description:</div>
+                    <div class="detail-value" th:text="${assignment.description}">Description here</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Due Date:</div>
+                    <div class="detail-value" th:text="${assignment.dueDate}">2024-12-31</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Status:</div>
+                    <div class="detail-value" th:text="${assignment.status}">Pending</div>
+                </div>
+            </div>
+            
+            <p>Please log in to the system to view and complete this assignment.</p>
+            
+            <a href="http://localhost:1234/employee" class="button">Go to Dashboard →</a>
+        </div>
+        <div class="footer">
+            <p>&copy; <span th:text="${year}">2024</span> Traployee. All rights reserved.</p>
+            <p>This is an automated message, please do not reply.</p>
+        </div>
+    </div>
+</body>
+</html>
